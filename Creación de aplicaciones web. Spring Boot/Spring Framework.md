@@ -8,7 +8,7 @@ Una vez tengamos creado el proyecto inicial, podemos empezar a trabajar en él. 
 
 
 
-Configuración del servidor
+## Configuración del servidor
 Lo primero de todo será editar el fichero de configuración del proyecto para personalizarlo a nuestro caso:
 
 application.properties
@@ -29,7 +29,9 @@ Hay que tener en cuenta que la propiedad spring.jpa.hibernate.ddl-auto se utiliz
 none: Para indicar que no queremos que genere la base de datos
 update: Si queremos que la genere de nuevo en cada arranque
 create: Si queremos que la cree pero que no la genere de nuevo si ya existe
-Definir la Base de Datos
+
+## Definir la Base de Datos
+
 Hay que tener en cuenta que Spring utiliza por debajo el framework de Hibernate para trabajar con la Base de Datos. Eso nos va a permitir trabajar con nuestras clases Java directamente sobre la Base de Datos, ya que será Hibernate quién realizará el mapeo entre el objeto Java (y sus atributos) y la tabla de MySQL (y sus columnas) a la hora de realizar consultas, inserciones, modificaciones o borrados. E incluso a la hora de crear las tablas, puesto que bastará con definir nuestro modelo de clases con las anotaciones apropiadas para que Spring pueda crearlas en base a éstas (y porque tenemos la opción spring.jpa.hibernate.ddl-auto=update en el fichero de configuración). Cuando ya no queramos que Spring genere automáticamente la base de datos en cada arranque (por ejemplo, en producción), tendremos que poner cambiar esa opción a valor none.
 
 Simplemente tendremos que crear la base de datos. Y ya de paso aprovecharemos para crear un usuario con el que la aplicación web se conectará (de esa manera evitamos tener que configurar el acceso usando el usuario root).
@@ -71,7 +73,9 @@ public class Product {
     private LocalDateTime creationDate;
 }
 Recordad que todas las anotaciones Java en el ejemplo anterior son clases que pertenecen al paquete 'javax.persistence'. Tened cuidado de no importar las mismas clases que existen en otros paquetes, aunque estén relacionados con Spring
-El Acceso a la Base de Datos
+
+## El Acceso a la Base de Datos
+
 Ahora creamos la interface donde se definirán los métodos que permitirán acceder a la Base de Datos. En este caso nos basta con definir las cabeceras de los mismos, puesto que se trata de una interface. Será el framework el que se encargue de su implementación. En este caso hemos definido métodos para obtener todas las puntuaciones y otro para obtener las que tengan una puntuación determinada. Además, podremos contar con que tenemos las operaciones que nos permiten registrar/modificar (save) y eliminar (delete) información de la Base de Datos.
 
 /** 
@@ -84,7 +88,7 @@ public interface ProductRepository extends CrudRepository<Product, Long> {
     Product findByName(String name);
     Set<Product> findByNameAndPrice(String name, float price);
 }
-Implementación de la lógica de negocio: Los Services
+## Implementación de la lógica de negocio: Los Services
 Los Services serán la capa de nuestra aplicación web donde implementaremos toda la lógica de negocio.
 
 Definiremos una interface con todos los métodos que necesitemos:
@@ -118,7 +122,8 @@ public class ProductServiceImpl implements ProductService {
  
     }
 }
-Plantillas HTML para renderizar el contenido
+## Plantillas HTML para renderizar el contenido
+
 Las plantillas HTML son los ficheros HTML que definen las diferentes secciones de la web en las que hay que renderizar contenido al usuario. Pueden contenter solamente código HTML (index.html) o también etiquetas del motor de plantillas Thymeleaf para acceder a objetos Java que le han sido pasados como parámetro. De esta manera podemos incluir estos datos en el contenido que se mostrará al usuario (catalog.html).
 
 Estas plantillas están ubicadas siempre en la carpeta templates del proyecto. El controlador (implementando un poco más abajo) es quien accede a ellas y espera encontrarlas allí directamente. Por eso simplemente es necesario facilitarle el nombre de la misma (sin la extensión).
@@ -151,15 +156,18 @@ La página donde se lista el contenido del catálogo de la tienda online, la pla
     </ul>
 </body>
 </html>
-Implementación del Controller
+
+## Implementación del Controller
+
 Por último, crearemos la clase que hará de Controller de la aplicación. En ella introduciremos los métodos con las operaciones que queremos que nuestros usuarios puedan realizar, programaremos la lógica que necesitemos y accederemos a los datos a través del OpinionRepository que hemos creado en el paso anterior.
 
 Por lo general los métodos del controlador tomarán como parámetro un objeto de la clase Model que es la plantilla que quedará asociada a él. De esa manera, podemos añadir atributos a dicha plantilla para que sea capaz de renderizar contenido de la parte Java (como hacemos con el método catalog). Estos métodos también devuelven un objeto String que será el nombre de la plantilla que debe ser renderizada una vez se ejecute el método. Estas plantillas estarán ubicadas en la carpeta templates del proyecto.
 
 En este caso hemos creado tres métodos:
 
-String index(Model model):
-String catalog(Model model):
+* String index(Model model):
+* String catalog(Model model):
+
 Cada una de los métodos tienen una URL de mapeo que marca el punto de entrada a la web para que se ejecute dicho método y se genere el código HTML correspondiente, que dependerá de la plantilla web devuelta (los métodos devuelven un String que es el nombre de la plantilla utilizada).
 
 Asi, según el código implementado, hay 2 secciones en la web accesibles por las siguientes URLs:
@@ -199,7 +207,7 @@ Figure 2: Estructura de proyecto de aplicación web con Spring Boot
 
 ![Estructura de proyecto de aplicación web con Spring Boot](project.png)
 
-Ejecución de la aplicación web
+## Ejecución de la aplicación web
 Una vez terminado todo, para lanzar el servidor tenemos dos opciones:
 
 Desde el propio IDE, ejecutando mvn spring-boot:run
