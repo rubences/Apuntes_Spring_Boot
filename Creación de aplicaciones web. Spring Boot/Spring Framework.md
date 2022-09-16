@@ -17,13 +17,16 @@ spring.jpa.hibernate.ddl-auto=update
 spring.jpa.properties.hibernate.globally_quoted_identifiers=true
  
 # Puerto donde escucha el servidor una vez se inicie
+
 server.port=8080
  
 # Datos de conexion con la base de datos MySQL
+
 spring.datasource.url=jdbc:mysql://localhost:3306/myshoponline
 spring.datasource.username=myshopuser
 spring.datasource.password=mypassword
 spring.datasource.driverClassName=com.mysql.jdbc.Driver
+
 Hay que tener en cuenta que la propiedad spring.jpa.hibernate.ddl-auto se utiliza para que la base de datos se genere automáticamente en cada arranque de la aplicación. Esto nos interesará cuando estemos en desarrollo pero no cuando queramos desplegarla en producción. Por lo que tendremos que tener cuidado y controlar el valor de dicha propiedad.
 
 none: Para indicar que no queremos que genere la base de datos
